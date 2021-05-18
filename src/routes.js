@@ -1,5 +1,9 @@
-const express = require("express");
+const { Router } = require("express");
 
-const router = express.Router();
+const AccountController = require("./controllers/AccountController");
+
+const router = Router();
+
+router.post("/account/create", AccountController.index);
 
 module.exports = router;
