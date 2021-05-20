@@ -17,6 +17,10 @@ const UserSchema = new mongo.Schema({
     required: true,
     select: false,
   },
+  jwtVersion: {
+    type: Number,
+    default: 0,
+  },
 });
 
 UserSchema.pre("save", async function (next) {
