@@ -37,4 +37,33 @@ router.post("/sign-up", async (req, res) => {
   }
 });
 
+router.post("/refresh", async (req, res) => {
+  const token = getTokenFromHeaders(req.headers);
+
+  if (!token) {
+    return res.json({ error: "token nonexistent" });
+  }
+
+  try {
+    const decoded = verifyRefreshJwt(token);
+
+    const account = await User.findById(decoded.id);
+    console.log(account);
+
+    if (!account) return res.json({ error: "not token in account" });
+
+    if (decoded.version != account.jwtVersion) {
+      return res.json({ error: "not version" });
+    }
+
+    const meta = {
+      token: generateJwt({ id: account.id }),
+    };
+
+    return res.json({ meta });
+  } catch (err) {
+    return res.json({ error: "error in refresh token" });
+  }
+});
+
 module.exports = router;
