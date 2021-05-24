@@ -48,7 +48,6 @@ router.post("/refresh", async (req, res) => {
     const decoded = verifyRefreshJwt(token);
 
     const account = await User.findById(decoded.id);
-    console.log(account);
 
     if (!account) return res.json({ error: "not token in account" });
 
