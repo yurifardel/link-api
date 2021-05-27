@@ -2,7 +2,7 @@ const mongo = require("mongoose");
 
 mongo.connect("mongodb://localhost/link", {
   useCreateIndex: true,
-  useFindAndModify: true,
+  useFindAndModify: false,
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
