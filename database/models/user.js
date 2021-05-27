@@ -21,6 +21,18 @@ const UserSchema = new mongo.Schema({
     type: Number,
     default: 0,
   },
+  token: {
+    type: String,
+    select: false,
+  },
+  refreshToken: {
+    type: String,
+    select: false,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 UserSchema.pre("save", async function (next) {
