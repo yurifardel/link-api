@@ -19,20 +19,24 @@ router.post("/sign-up", async (req, res) => {
       return res.json({ status: 400, error: "user already exists" });
     }
 
-    const user = User.create({ email, password });
+    const user = await User.create({ email, password });
 
-    const promise = user.then((data) => {
-      const token = generateJwt({ id: data.id });
-      const refreshToken = generateRefreshJwt({
-        id: data.id,
-        version: data.jwtVersion,
-      });
-
-      return res.json({ data, token, refreshToken });
+    const token = generateJwt({ id: user.id });
+    const refreshToken = generateRefreshJwt({
+      id: user.id,
+      version: user.jwtVersion,
     });
 
-    return promise;
+    await User.findByIdAndUpdate(user.id, {
+      $set: {
+        token: token,
+        refreshToken: refreshToken,
+      },
+    });
+
+    return res.json({ user });
   } catch (err) {
+    console.log(err);
     return res.json({ status: 400, error: "register failed" });
   }
 });
