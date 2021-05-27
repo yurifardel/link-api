@@ -1,4 +1,5 @@
 const User = require("../../database/models/user");
+const bcrypt = require("bcryptjs");
 
 const { Router } = require("express");
 
@@ -39,6 +40,27 @@ router.post("/sign-up", async (req, res) => {
     console.log(err);
     return res.json({ status: 400, error: "register failed" });
   }
+});
+
+router.post("/sign-in", async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email }).select("+password");
+
+  if (!user) {
+    return res.json({ error: "user not found" });
+  }
+
+  if (!(await bcrypt.compare(password, user.password))) {
+    return res.json({ error: "invalid password" });
+  }
+
+  const token = generateJwt({ id: user.id });
+  const refreshToken = generateRefreshJwt({
+    id: user.id,
+    version: user.jwtVersion,
+  });
+
+  return res.json({ user, metadata: { token, refreshToken } });
 });
 
 router.post("/refresh", async (req, res) => {
