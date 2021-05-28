@@ -1,5 +1,7 @@
 const User = require("../../database/models/user");
 const bcrypt = require("bcryptjs");
+const { accountSignIn, accountSignUp } = require("../validator/account");
+const { getMessage } = require("../helpers/validator");
 
 const { Router } = require("express");
 
@@ -12,12 +14,17 @@ const {
   getTokenFromHeaders,
 } = require("../helpers/jwt");
 
-router.post("/sign-up", async (req, res) => {
+router.post("/sign-up", accountSignUp, async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, confirm_password } = req.body;
 
-    if (await User.findOne({ email })) {
-      return res.json({ status: 400, error: "user already exists" });
+    const account = await User.findOne({ email });
+    if (account) {
+      return res.jsonBadRequest(
+        null,
+        getMessage("account.signin.email_exists"),
+        null
+      );
     }
 
     const user = await User.create({ email, password });
@@ -35,14 +42,17 @@ router.post("/sign-up", async (req, res) => {
       },
     });
 
-    return res.json({ user });
+    return res.jsonOK(user, getMessage("account.signup.success"), {
+      token,
+      refreshToken,
+    });
   } catch (err) {
     console.log(err);
     return res.json({ status: 400, error: "register failed" });
   }
 });
 
-router.post("/sign-in", async (req, res) => {
+router.post("/sign-in", accountSignIn, async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email }).select("+password");
 
@@ -51,7 +61,7 @@ router.post("/sign-in", async (req, res) => {
   }
 
   if (!(await bcrypt.compare(password, user.password))) {
-    return res.json({ error: "invalid password" });
+    return res.json(getMessage("account.signin.invalid"));
   }
 
   const token = generateJwt({ id: user.id });
