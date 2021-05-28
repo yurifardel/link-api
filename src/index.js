@@ -1,4 +1,5 @@
 const express = require("express");
+const response = require("./middlewares/response");
 
 const AccountController = require("../src/controllers/AccountController");
 
@@ -6,6 +7,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(response);
 
 app.use("/auth", AccountController);
 
