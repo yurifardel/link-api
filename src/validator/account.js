@@ -58,7 +58,7 @@ const accountSignUp = (req, res, next) => {
 
     next();
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 };
 

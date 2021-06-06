@@ -16,7 +16,7 @@ const {
 
 router.post("/sign-up", accountSignUp, async (req, res) => {
   try {
-    const { email, password, confirm_password } = req.body;
+    const { email, password } = req.body;
 
     const account = await User.findOne({ email });
     if (account) {
