@@ -18,6 +18,7 @@ const accountSignIn = (req, res, next) => {
   });
 
   const { error } = schema.validate({ email, password }, options);
+
   if (error) {
     const messages = getValidatorError(error, "account.signin");
 
@@ -46,6 +47,16 @@ const accountSignUp = (req, res, next) => {
       return res.jsonUnauthorized(
         null,
         getMessage("account.signup.confirm_password.any.only"),
+        null
+      );
+    }
+
+    const rgExp = RegExp(/\S+@\S+\.\S+/);
+
+    if (!rgExp.test(email)) {
+      return res.jsonUnauthorized(
+        null,
+        getMessage("account.signup.email.string.email"),
         null
       );
     }
