@@ -2,7 +2,7 @@ const { getMessage } = require("./msg");
 
 const getValidatorError = (error, messagePath) => {
   if (!error) return null;
-  console.log(error);
+  // console.log(error);
 
   const errorMessages = {};
   error.details.map((details) => {
@@ -14,7 +14,7 @@ const getValidatorError = (error, messagePath) => {
     const path = `${messagePath}.${key}.${type}`;
 
     const customMessage = getMessage(path);
-    console.log(customMessage);
+    // console.log("msg - " + customMessage);
     if (!customMessage) {
       console.log("customMessage not found for path", path);
     }
