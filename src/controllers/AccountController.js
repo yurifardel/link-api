@@ -1,5 +1,8 @@
 const User = require("../../database/models/user");
 const bcrypt = require("bcryptjs");
+// const crypto = require("crypto");
+const mongo = require("mongoose");
+
 const { accountSignIn, accountSignUp } = require("../validator/account");
 const { getMessage } = require("../helpers/validator");
 
@@ -27,7 +30,11 @@ router.post("/sign-up", accountSignUp, async (req, res) => {
       );
     }
 
-    const user = await User.create({ email, password });
+    // const id = crypto.randomBytes(6).toString("HEX");
+
+    const id = mongo.Types.ObjectId();
+
+    const user = await User.create({ email, password, userId: id });
 
     const token = generateJwt({ id: user.id });
     const refreshToken = generateRefreshJwt({
