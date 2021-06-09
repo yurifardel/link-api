@@ -1,7 +1,9 @@
 const mongo = require("../mongoose");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 
 const UserSchema = new mongo.Schema({
+  userId: { type: String, ref: "LinkCollec" },
   name: {
     type: String,
     require: true,
