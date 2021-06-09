@@ -8,14 +8,14 @@ const checkJwt = (req, res, next) => {
   if (isExcluded) return next();
 
   const token = getTokenFromHeaders(req.headers);
-  console.log(token);
+  // console.log(token);
   if (!token) {
-    return res.jsonUnauthorized(null, "entrou");
+    return res.jsonUnauthorized(null, "Unauthorized");
   }
 
   try {
     const decoded = verifyJwt(token);
-    req.accountId = decoded.indexOf;
+    req.accountId = decoded.id;
     next();
   } catch (err) {
     // console.log(err);
