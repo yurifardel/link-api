@@ -4,12 +4,19 @@ const User = require("../../database/models/user");
 const mongo = require("mongoose");
 const router = express.Router();
 
+const { getTokenFromHeaders, verifyJwt } = require("../helpers/jwt");
+
 router.post("/", async (req, res) => {
   try {
-    const { body } = req;
-    // console.log(req.userId);
+    const token = getTokenFromHeaders(req.headers);
+    if (!token) {
+      return res.json({ error: "token nonexistent" });
+    }
 
-    const { label, url, isSocial } = body;
+    const decoded = verifyJwt(token);
+    const id = decoded.id;
+
+    const { label, url, isSocial } = req.body;
 
     const image = "https://gooogle.com/image.png";
 
@@ -18,7 +25,7 @@ router.post("/", async (req, res) => {
       url,
       isSocial,
       image,
-      id_usuario: req.userId,
+      id_usuario: id,
     });
 
     res.jsonOK(link);
@@ -33,14 +40,15 @@ router.get("/", async (req, res) => {
   return res.jsonOK(links);
 });
 
-router.get("/:_id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(req.params);
+    console.log(id);
 
-    const link = await LinkCollection.findOne({ userId: id });
+    const link = await LinkCollection.findOne({ id_usuario: id });
     if (!link) return res.jsonNotFound();
-    return res.jsonOk(link);
+
+    return res.jsonOK(link);
   } catch (err) {
     console.log(err);
   }
