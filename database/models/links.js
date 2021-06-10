@@ -1,9 +1,13 @@
 const mongo = require("mongoose");
 
-let id = mongo.Schema.Types.ObjectId();
+// let id = mongo.Schema.Types.ObjectId();
 
 const LinkSchema = new mongo.Schema({
-  userId: { type: String, ref: "Users" },
+  id_usuario: {
+    type: mongo.Schema.Types.ObjectId,
+    ref: "Users",
+    required: false,
+  },
   label: {
     type: String,
     required: true,
@@ -26,6 +30,6 @@ const LinkSchema = new mongo.Schema({
   },
 });
 
-const LinkCollection = mongo.model("LinkCollec", LinkSchema);
+const LinkCollection = mongo.model("LinkCollecs", LinkSchema);
 
 module.exports = LinkCollection;
