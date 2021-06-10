@@ -21,6 +21,7 @@ router.post("/sign-up", accountSignUp, async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // const userId = mongo.Types.ObjectId();
     const account = await User.findOne({ email });
     if (account) {
       return res.jsonBadRequest(
@@ -30,11 +31,7 @@ router.post("/sign-up", accountSignUp, async (req, res) => {
       );
     }
 
-    // const id = crypto.randomBytes(6).toString("HEX");
-
-    const id = mongo.Types.ObjectId();
-
-    const user = await User.create({ email, password, userId: id });
+    const user = await User.create({ email, password, userId: userId });
 
     const token = generateJwt({ id: user.id });
     const refreshToken = generateRefreshJwt({
@@ -101,6 +98,12 @@ router.post("/refresh", async (req, res) => {
     const meta = {
       token: generateJwt({ id: account.id }),
     };
+
+    await User.findByIdAndUpdate(account.id, {
+      $set: {
+        refreshToken: meta.token,
+      },
+    });
 
     return res.json({ meta });
   } catch (err) {
