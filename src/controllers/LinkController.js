@@ -7,10 +7,9 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   try {
     const { body } = req;
+    // console.log(req.userId);
 
     const { label, url, isSocial } = body;
-
-    const id = mongo.Types.ObjectId();
 
     const image = "https://gooogle.com/image.png";
 
@@ -19,7 +18,7 @@ router.post("/", async (req, res) => {
       url,
       isSocial,
       image,
-      userId: id,
+      id_usuario: req.userId,
     });
 
     res.jsonOK(link);
