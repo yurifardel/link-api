@@ -21,7 +21,7 @@ router.post("/sign-up", accountSignUp, async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // const userId = mongo.Types.ObjectId();
+    const id = mongo.Types.ObjectId();
     const account = await User.findOne({ email });
     if (account) {
       return res.jsonBadRequest(
@@ -31,7 +31,7 @@ router.post("/sign-up", accountSignUp, async (req, res) => {
       );
     }
 
-    const user = await User.create({ email, password, userId: userId });
+    const user = await User.create({ email, password, id_usuario: id });
 
     const token = generateJwt({ id: user.id });
     const refreshToken = generateRefreshJwt({
