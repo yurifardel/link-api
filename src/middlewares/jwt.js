@@ -12,10 +12,12 @@ const checkJwt = (req, res, next) => {
   if (!token) {
     return res.jsonUnauthorized(null, "Unauthorized");
   }
+  // console.log(token);
 
   try {
     const decoded = verifyJwt(token);
-    req.accountId = decoded.id;
+    req.userId = decoded.id;
+    console.log(decoded);
     next();
   } catch (err) {
     // console.log(err);
