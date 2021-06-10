@@ -26,6 +26,7 @@ const verifyRefreshJwt = (token) => {
 
 const getTokenFromHeaders = (headers) => {
   let token = headers["authorization"];
+  console.log(token);
   token = token ? token.slice(7, token.length) : null;
   // console.log("VERIFICAÇÃO DO TOKEN: " + token);
   return token;
