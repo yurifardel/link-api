@@ -3,7 +3,11 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 
 const UserSchema = new mongo.Schema({
-  userId: { type: String, ref: "LinkCollec" },
+  id_usuario: {
+    type: mongo.Schema.Types.ObjectId,
+    ref: "LinkCollecs",
+    required: false,
+  },
   name: {
     type: String,
     require: true,
