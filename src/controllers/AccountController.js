@@ -1,6 +1,5 @@
 const User = require("../../database/models/user");
 const bcrypt = require("bcryptjs");
-// const crypto = require("crypto");
 const mongo = require("mongoose");
 
 const { accountSignIn, accountSignUp } = require("../validator/account");
