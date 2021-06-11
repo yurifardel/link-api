@@ -1,7 +1,5 @@
 const express = require("express");
 const LinkCollection = require("../../database/models/links");
-const User = require("../../database/models/user");
-const mongo = require("mongoose");
 const router = express.Router();
 
 const { getTokenFromHeaders, verifyJwt } = require("../helpers/jwt");
