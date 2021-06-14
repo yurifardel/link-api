@@ -41,12 +41,28 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
+    // console.log(id);
 
-    const link = await LinkCollection.findOne({ id_usuario: id });
+    const link = await LinkCollection.findOne({ _id: id });
     if (!link) return res.jsonNotFound();
 
     return res.jsonOK(link);
+  } catch (err) {
+    // console.log(err);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    // console.log(id);
+
+    const link = await LinkCollection.findOne({ _id: id });
+    if (!link) return res.jsonNotFound();
+
+    await link.deleteOne();
+
+    return res.jsonOK();
   } catch (err) {
     console.log(err);
   }
