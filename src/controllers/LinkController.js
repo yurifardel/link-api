@@ -43,7 +43,7 @@ router.get("/:id", async (req, res) => {
     const { id } = req.params;
     // console.log(id);
 
-    const link = await LinkCollection.findOne({ _id: id });
+    const link = await LinkCollection.findOne().where({ _id: id });
     if (!link) return res.jsonNotFound();
 
     return res.jsonOK(link);
@@ -57,7 +57,7 @@ router.delete("/:id", async (req, res) => {
     const { id } = req.params;
     // console.log(id);
 
-    const link = await LinkCollection.findOne({ _id: id });
+    const link = await LinkCollection.findOne().where({ _id: id });
     if (!link) return res.jsonNotFound();
 
     await link.deleteOne();
@@ -73,7 +73,7 @@ router.put("/:id", async (req, res) => {
 
   const fields = ["label", "url", "isSocial"];
 
-  const link = await LinkCollection.findOne({ _id: id });
+  const link = await LinkCollection.findOne().where({ _id: id });
   if (!link) return res.jsonNotFound();
 
   fields.map((field) => {
