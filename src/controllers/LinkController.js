@@ -48,7 +48,7 @@ router.get("/:id", async (req, res) => {
 
     return res.jsonOK(link);
   } catch (err) {
-    // console.log(err);
+    console.log(err);
   }
 });
 
@@ -66,6 +66,23 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+});
+
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const fields = ["label", "url", "isSocial"];
+
+  const link = await LinkCollection.findOne({ _id: id });
+  if (!link) return res.jsonNotFound();
+
+  fields.map((field) => {
+    const newValue = req.body[field];
+    if (newValue) link[field] = newValue;
+  });
+
+  await link.save();
+  return res.jsonOK(link);
 });
 
 module.exports = router;
